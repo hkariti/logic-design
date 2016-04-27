@@ -1,5 +1,6 @@
 library ieee;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
 entity FSM_tb is
 
@@ -46,4 +47,5 @@ begin
             CoinIn <= std_logic_vector(to_unsigned(i, 2));
         end if;
     end process;
+end architecture;
 
