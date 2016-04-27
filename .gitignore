@@ -1,2 +1,6 @@
+*
+!*.*
 *.cf
 *.o
+*.vcd
+.DS_Store
