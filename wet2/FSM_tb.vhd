@@ -41,11 +41,45 @@ begin
         rstn <= '1';
         wait;
     end process;
-    process (clk) begin
-        if (clk'event and clk = '1') then
-            i <= i + 1;
-            CoinIn <= std_logic_vector(to_unsigned(i, 2));
-        end if;
+    process begin
+        CoinIn <= "00";
+        wait for 2 ns;
+        CoinIn <= "01";
+        wait for 2 ns;
+        CoinIn <= "01";
+        wait for 2 ns;
+        CoinIn <= "11";
+        wait for 2 ns;
+        CoinIn <= "00";
+        wait for 2 ns;
+        CoinIn <= "00";
+        wait for 2 ns;
+
+        CoinIn <= "01";
+        wait for 2 ns;
+        CoinIn <= "11";
+        wait for 2 ns;
+        CoinIn <= "00";
+        wait for 2 ns;
+        CoinIn <= "00";
+        wait for 2 ns;
+
+        CoinIn <= "11";
+        wait for 2 ns;
+        CoinIn <= "00";
+        wait for 2 ns;
+
+        CoinIn <= "10";
+        wait for 2 ns;
+        CoinIn <= "10";
+        wait for 2 ns;
+        CoinIn <= "00";
+        wait for 2 ns;
+
+        CoinIn <= "10";
+        wait for 2 ns;
+        CoinIn <= "01";
+        wait for 2 ns;
     end process;
 end architecture;
 
