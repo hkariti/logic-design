@@ -15,14 +15,16 @@ architecture behavior of PipedMul_tb is
                 RstN : std_logic
         );
     end component;
-    signal clk : std_logic;
+    signal clk : std_logic := '0';
     signal s: std_logic_vector(5 downto 0);
     signal rstn : std_logic := '1';
-    signal in_vec : std_logic_vector(5 downto 0);
+    signal i : integer := 0;
+    signal a_vec : std_logic_vector(3 downto 0) := (others => '0');
+    signal b_vec : std_logic_vector(1 downto 0) := (others => '0');
 begin
     pipedmul_1: PipedMul port map (
-            A => in_vec(5 downto 2),
-            B => in_vec(1 downto 0),
+            A => a_vec,
+            B => b_vec,
             S => s,
             clk => clk,
             rstn => rstn
@@ -35,9 +37,16 @@ begin
     end process;
 
     process begin
-        for i in 0 to 63 loop
-            in_vec <= std_logic_vector(to_unsigned(i, in_vec'length));
-            wait for 2 ns;
-        end loop;
+        rstn <= '0';
+        wait for 1 ns;
+        rstn <= '1';
+        wait;
+    end process;
+    process (clk) begin
+        if (clk'event and clk = '1') then
+            i <= i + 1;
+            a_vec <= std_logic_vector(to_unsigned(i/4, 4));
+            b_vec <= std_logic_vector(to_unsigned(i mod 4, 2));
+        end if;
     end process;
 end architecture;
