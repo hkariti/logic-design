@@ -15,10 +15,12 @@ architecture behavior of MulBlock_tb is
             So : out std_logic_vector(4 downto 0)
         );
     end component;
-    signal clk, B : std_logic;
+    signal clk : std_logic;
     signal rstn : std_logic := '1';
-    signal a_vec, si_vec : std_logic_vector(3 downto 0);
-    signal so_vec : std_logic_vector(4 downto 0);
+    signal a_vec, si_vec : std_logic_vector(3 downto 0) := (others => '0');
+    signal so_vec : std_logic_vector(4 downto 0) := (others =>'0');
+    signal b : std_logic := '0';
+    signal i : integer := 0;
 begin
     pipedmul_1: MulBlock port map (
             A => a_vec,
@@ -35,8 +37,9 @@ begin
         clk <= '1';
     end process;
 
-    process begin
-        for i in 0 to 127 loop
+    process (clk) begin
+        if (clk'event and clk = '1') then
+            i <= i+1;
             si_vec <= std_logic_vector(to_unsigned(i/32, 4));
             a_vec <= std_logic_vector(to_unsigned((i mod 32)/2, 4));
             if i mod 2 = 0 then
@@ -44,9 +47,7 @@ begin
             else
                 b <= '1';
             end if;
-
-            wait for 2 ns;
-        end loop;
+        end if;
     end process;
 end architecture;
 
