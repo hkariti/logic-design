@@ -30,41 +30,46 @@ begin
         RSTn => RSTn
     );
 
-    ns(0) <= ((not ps(0)) and (not ps(1)) and (not ps(2)) and (not CoinIn(1)) and CoinIn(0))
-             or 
-             (ps(0) and (not ps(1)) and (not ps(2)) and (
-                (not CoinIn(0) and not CoinIn(1)) or
-                (CoinIn(0) and CoinIn(1))))
+    ns(0) <= (((not ps(0)) and (not ps(1)) and (not ps(2))) and ((not CoinIn(1)) and CoinIn(0)))
              or
-             (not ps(0) and ps(1) and not ps(2) and CoinIn(0) and CoinIn(1));
-    ns(1) <= ((not ps(0)) and (not ps(1)) and (not ps(2)) and (CoinIn(1) and (not CoinIn(0))))
-             or 
-             (ps(0) and (not ps(1)) and (not ps(2)) and (CoinIn(0)))
+             ((ps(0) and (not ps(1)) and (not ps(2)) and (CoinIn(1) or (not CoinIn(0)))))
              or
-             ((not ps(0)) and ps(1) and (not ps(2)) and (
-                ((not CoinIn(0)) and (not CoinIn(1)))
-                or
-                (CoinIn(0) and CoinIn(1))
-            ));
-    ns(2) <= ((not ps(0)) and (not ps(1)) and (not ps(2)) and (CoinIn(1)) and CoinIn(0))
-             or 
-             (not ps(0) and ps(1) and not ps(2) and CoinIn(1) and (not CoinIn(0)))
+             ((not ps(0)) and ps(1) and (not ps(2)) and (CoinIn(0) xor CoinIn(1)))
              or
-             (ps(0) and ps(1) and (not ps(2)));
-    soda <=  (ps(0) and (not ps(1)) and (not ps(2)) and (CoinIn(1)) and (not CoinIn(0)))
+             (ps(2) and (not ps(1)) and ps(0))
              or
-             ((not ps(0)) and ps(1) and (not ps(2)) and (not CoinIn(1)) and CoinIn(0))
+             ((not ps(2)) and ps(1) and ps(0))
              or
-             ((not ps(0)) and (not ps(1)) and ps(2));
-    
-    CoinOut(0) <= (ps(0) and (not ps(1)) and (not ps(2)) and CoinIn(0) and CoinIn(1))
-                  or
-                  ((not ps(0)) and ps(1) and (not ps(2)) and CoinIn(1) and (not CoinIn(0)));
+             (ps(2) and (not ps(1)) and (not ps(0)));
 
-    CoinOut(1) <=  ((not ps(0)) and (not ps(1)) and (not ps(2)) and (CoinIn(1)) and CoinIn(0))
-                   or
-                   ((not ps(0)) and ps(1) and (not ps(2)) and (CoinIn(1)) and CoinIn(0))
-                   or
-                   ((ps(0)) and (ps(1)) and (not ps(2)));
+    ns(1) <= ((not (ps(2)) and ps(1) and (not ps(0))))
+             or
+             (((not ps(2)) and (not ps(1)) and ps(0)) and (CoinIn(0) xor CoinIn(1)))
+             or 
+             ( (not ps(2)) and ( not ps(1) ) and (not ps(0)) and CoinIn(1) and (not CoinIn(0)) )
+             or
+             (ps(2) and (not ps(1)) and (not ps(0)))
+             or
+             ((not ps(2)) and ps(1) and ps(0))
+             or
+             (ps(2) and (not ps(1)) and ps(0));
+    ns(2) <= ( (not ps(2)) and (not ps(1)) and (not ps(0)) and CoinIn(0) and CoinIn(1) )
+             or
+             ( (not ps(2)) and (not ps(1)) and ps(0) and CoinIn(1) )
+             or
+             ( (not ps(2)) and ps(1) and (not ps(0)) and CoinIn(0) )
+             or
+             ((not ps(2)) and ps(1) and ps(0))
+             or
+             (ps(2) and (not ps(1)) and (not ps(0)))
+             or
+             (ps(2) and ps(1) and (not ps(0)));
 
+    soda <=  (ps(2) and ps(1) and ps(0));   
+    CoinOut(0) <= ((not ps(2)) and ps(1) and ps(0));
+    CoinOut(1) <=  (ps(2) and ( not ps(1)) and (not ps(0)))
+                   or
+                   (ps(2) and (not ps(1)) and ps(0))
+                   or
+                   (ps(2) and ps(1) and (not ps(0)));
 end behavior;
