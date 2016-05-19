@@ -18,17 +18,19 @@ architecture behavior of Compare2_tb is
     signal N : integer := 4;
     signal A, B, Max, Min : std_logic_vector (N-1 downto 0);
     signal i : integer := 0;
+    signal vector_i : std_logic_vector(2*N-1 downto 0);
 begin
-    cmp: Compare2 port map (
+    cmp: Compare2 generic map (N => N) port map (
         A => A,
         B => B,
         Max => Max,
         Min => Min
     );
 
+    A <= vector_i(2*N-1 downto N);
+    B <= vector_i(N-1 downto 0);
     process begin
-        A <= std_logic_vector(to_unsigned(i/N, N));
-        B <= std_logic_vector(to_unsigned(i mod N, N));
+        vector_i <= std_logic_vector(to_unsigned(i, 2*N));
         i <= i + 1;
         wait for 1 ns;
     end process;
