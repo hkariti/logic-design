@@ -33,7 +33,7 @@ port (
 	B : in  std_logic_vector(M_DATA_WIDTH-1 downto 0);-- Mux Second input
 	C : in  std_logic_vector(M_DATA_WIDTH-1 downto 0);-- Mux Third input
     S : in  std_logic_vector(1 downto 0);-- Select input
-	Z : out  std_logic_vector(M_DATA_WIDTH-1 downto 0) := "00"-- Mux Out
+	Z : out  std_logic_vector(M_DATA_WIDTH-1 downto 0) := (others=>'0')-- Mux Out
 );
 end entity;
 
@@ -68,24 +68,22 @@ end entity;
 
 architecture behavior of Mux4 is
 
-signal mux3_1_out : std_logic_vector(M_DATA_WIDTH downto 0);
+signal mux3_1_out : std_logic_vector(M_DATA_WIDTH-1 downto 0);
 signal not_out : std_logic := '0';
 signal s_mux_3_2 : std_logic_vector(1 downto 0);
 component mux3
-	port (A, B, C: in std_logic_vector(M_DATA_WIDTH downto 0);
+    generic ( M_DATA_WIDTH : integer := M_DATA_WIDTH );
+	port (A, B, C: in std_logic_vector(M_DATA_WIDTH-1 downto 0);
         s : in std_logic_vector(1 downto 0);
-		z: out std_logic_vector(M_DATA_WIDTH downto 0));
+		z: out std_logic_vector(M_DATA_WIDTH-1 downto 0));
 end component;
 
 begin
-not_out <= not s(0);
-s_mux_3_2 <= ( 0 => not_out, 1=> s(1));
-mux3_1: mux3 port map (
-	s  => s,
-	A => A,
-	B => B,
-	C => A,
-	Z => mux3_1_out );
+not_out <= not s(1);
+s_mux_3_2 <= ( 0 => s(0), 1=> not_out);
+
+mux3_1: mux3
+port map ( s  => s, A => A, B => B, C => A, Z => mux3_1_out );
 
 mux_3_2: mux3 port map (
 	s => s_mux_3_2,
@@ -168,14 +166,16 @@ component Reg is
      );
 end component;
 
-type mux_outs is array(6 downto 0) of std_logic_vector(N-1 downto 0);
-type mux_selectors is array (6 downto 0) of std_logic_vector(1 downto 0);
-type reg_outs is array(4 downto 0) of std_logic_vector(N-1 downto 0);
+type mux_outs is array(5 downto 0) of std_logic_vector(N-1 downto 0);
+type mux_selectors is array (5 downto 0) of std_logic_vector(1 downto 0);
+type reg_outs is array(3 downto 0) of std_logic_vector(N-1 downto 0);
+type inputs is array (3 downto 0) of std_logic_vector(N-1 downto 0);
 signal Ato2,Bto2,MinFrom2,MaxFrom2 : std_logic_vector (N-1 downto 0);
 signal mux_s : mux_selectors;
 signal reg_en: std_logic_vector(3 downto 0); 
 signal m_out : mux_outs;
 signal r_out : reg_outs;
+signal num_inputs : inputs := (D,C,B,A);
 
 begin
 
@@ -192,7 +192,7 @@ end generate;
 
 mux3_gen: for i in 0 to 3 generate
     m3: Mux3 
-        port map (A => A, B => MinFrom2, C => MaxFrom2, Z => m_out(i), s=>mux_s(i));
+        port map (A => num_inputs(i), B => MinFrom2, C => MaxFrom2, Z => m_out(i), s=>mux_s(i));
 end generate;
 
 m4_0: Mux4
@@ -200,34 +200,9 @@ m4_0: Mux4
 
 m4_1: Mux4
     port map(A => r_out(0), B => r_out(1), C => r_out(2), D => r_out(3), Z => Bto2, s=>mux_s(5));
---r0: Reg
---      port map (CLK=>CLK, RSTn=>RSTn, D=>m0_out, Q=>r0_out, en=>reg_en(0));
---
---r1: Reg
---      port map (CLK=>CLK, RSTn=>RSTn, D=>m1_out, Q=>r1_out, en=>WeB);
---
---r2: Reg
---      port map (CLK=>CLK, RSTn=>RSTn, D=>m2_out, Q=>r2_out, en=>WeC);
---
---r3: Reg
---      port map (CLK=>CLK, RSTn=>RSTn, D=>m3_out, Q=>r3_out, en=>WeD);
---
---m0: mux3
---    port map (A => A, B => MinFrom2, C => MaxFrom2, Z => m0_out, s=>s0);
---
---m1: mux3
---    port map (A => B, B => MinFrom2, C => MaxFrom2, Z => m1_out, s=>s1);
---
---m2: mux3
---    port map (A => C, B => MinFrom2, C => MaxFrom2, Z => m2_out, s=>s2);
---
---m3: mux3
---    port map (A => D, B => MinFrom2, C => MaxFrom2, Z => m3_out, s=>s3);
---
---m4: mux4
---    port map(A => r0_out, B => r1_out, C => r2_out, D => r3_out, Z => Ato2, s=>s4);
---
---m5: mux4
---    port map(A => r0_out, B => r1_out, C => r2_out, D => r3_out, Z => Bto2, s=>s5);
 
+    first <= r_out(0);
+    second <= r_out(1);
+    third <= r_out(2);
+    fourth <= r_out(3);
 end architecture;
