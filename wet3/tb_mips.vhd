@@ -5,8 +5,8 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
-library modelsim_lib;
-use modelsim_lib.util.all;
+--library modelsim_lib;
+--use modelsim_lib.util.all;
 
 entity tb_mips is
 end tb_mips;
