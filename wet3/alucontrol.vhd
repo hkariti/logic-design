@@ -19,9 +19,10 @@ begin
   process(ALUOp, funct)
   begin
     case ALUOp is
-      -- when 00 or 01, opcode doesn't matter
+      -- when 00, 01 or 11, opcode doesn't matter
       when "00"   => ALUCtrl <= "010";
       when "01"   => ALUCtrl <= "110";
+      when "11"   => ALUCtrl <= "000";
       when others =>
 
         -- when 10, send different signal depending on opcode

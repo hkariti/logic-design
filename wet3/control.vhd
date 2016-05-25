@@ -48,6 +48,9 @@ begin  -- bhv
 	  -- when sw
       when "101011"   =>
 		opbits <= "00001";
+      -- when andi
+      when "001100"   =>
+        opbits <= "11001";
       when others =>
 		opbits <= "00000";
     end case;
@@ -56,10 +59,10 @@ begin  -- bhv
   ALUSrc     <= opbits(0) or opbits(1);
   ALUOp      <= opbits(4) & opbits(3);   
   RegWrite   <= opbits(1) or opbits(4);
-  RegDst     <= opbits(4);
+  RegDst     <= opbits(4) and (not (opbits(3)));
   Jump       <= opbits(2);
-  Branch     <= opbits(3);
+  Branch     <= opbits(3) and (not (opbits(4)));
   MemRead    <= opbits(1);
-  MemWrite   <= opbits(0);
+  MemWrite   <= opbits(0) and (opbits(3) nand opbits(4));
   MemtoReg   <= opbits(1);
 end bhv;
