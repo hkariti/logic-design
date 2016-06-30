@@ -21,6 +21,32 @@ begin
 		  d_in2 when others;
 end bhv;
 
+-- 4 to 1 mux with N-bit output
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.STD_LOGIC_ARITH.all;
+use IEEE.std_logic_unsigned.all;
+entity Mux_4to1_xN is
+  generic(
+		   WIDTH :     integer := 32);
+  port(
+		sel   : in  std_logic_vector(1 downto 0);
+		d_in1 : in  std_logic_vector((WIDTH - 1) downto 0);
+		d_in2 : in  std_logic_vector((WIDTH - 1) downto 0);
+		d_in3 : in  std_logic_vector((WIDTH - 1) downto 0);
+		d_in4 : in  std_logic_vector((WIDTH - 1) downto 0);
+		d_out : out std_logic_vector((WIDTH - 1) downto 0));
+end Mux_4to1_xN;
+
+architecture bhv of Mux_4to1_xN is
+begin
+  with sel select
+    d_out <= d_in1 when "00", 
+             d_in2 when "01",
+             d_in3 when "10",
+		     d_in4 when others;
+end bhv;
+
 -- 32 entry register file
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
