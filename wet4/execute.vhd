@@ -15,6 +15,7 @@ entity Mips_Execute is
   	ReadData2_in    : in std_logic_vector(31 downto 0);
 	reg2_num_in		: in std_logic_vector(4 downto 0);
  	LoadWord	   	: in std_logic;
+    LoadByte        : in std_logic;
 
 	new_pc			: in std_logic_vector(31 downto 0);
   	instruction_ofs	: in std_logic_vector(15 downto 0);
@@ -46,6 +47,7 @@ entity Mips_Execute is
 	ALU_result		: out std_logic_vector(31 downto 0);
   	ReadData2_forw_out   : out std_logic_vector(31 downto 0);
 	RegWrite_out	: out std_logic;
+    LoadByte_out    : out std_logic;
 
   	-- to fetch unit
 	Branch			: out std_logic;
@@ -107,6 +109,7 @@ signal 	ALUSrcB_lat			:  std_logic;
 signal	RegDst_lat			:  std_logic_vector(4 downto 0);
 signal 	RegWrite_lat			:  std_logic;
 signal 	LoadWord_lat			:  std_logic;
+signal  LoadByte_lat            :  std_logic;
 signal	new_pc_lat			:  std_logic_vector(31 downto 0);
 
 -- from ALU indicating the result is zero (for beq command)
@@ -138,6 +141,7 @@ process(clk, rst)
 		RegDst_lat			<= (others => '0'); 
 		RegWrite_lat		<= '0'; 
 		LoadWord_lat		<= '0'; 
+        LoadByte_lat        <= '0';
 	else
 	  if(clk'event and clk = '1') then
 		branch_instr_lat	<= branch_instr;
@@ -155,6 +159,7 @@ process(clk, rst)
 		RegDst_lat			<= RegDst_in;
 		RegWrite_lat		<= RegWrite_in;
 		LoadWord_lat		<= LoadWord;
+		LoadByte_lat		<= LoadByte;
 	  end if;
 	end if;
   end process;
@@ -200,6 +205,7 @@ process(clk, rst)
   ReadData2_forw_out <= forw_data2;
   RegWrite_out  <= RegWrite_lat;
   LoadWord_out  <= LoadWord_lat;
+  LoadByte_out  <= LoadByte_lat;
 
   zeros <= (others => '0');
 end bhv;

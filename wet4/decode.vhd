@@ -19,6 +19,7 @@ entity Mips_Decode is
 	Reg1_Valid      : out std_logic;
 	Reg2_Valid      : out std_logic;
  	LoadWord	   	: out std_logic;
+    LoadByte        : out std_logic;
 	Branch		    : out std_logic;
   	Jump		    : out std_logic;
   	jump_addr       : out std_logic_vector(31 downto 0);
@@ -79,6 +80,7 @@ architecture bhv of Mips_Decode is
 	   MemWrite : out std_logic;
 	   MemtoReg : out std_logic;
 	   LoadWord : out std_logic;
+       LoadByte : out std_logic;
 	   Reg1_Valid : out std_logic;
 	   Reg2_Valid : out std_logic;
 
@@ -127,6 +129,7 @@ signal MemRead_not_flushed   : std_logic;
 signal MemWrite_not_flushed  : std_logic;
 signal MemtoReg_not_flushed  : std_logic;
 signal LoadWord_not_flushed  : std_logic;
+signal LoadByte_not_flushed  : std_logic;
 signal Reg1_Valid_not_flushed : std_logic;
 signal Reg2_Valid_not_flushed : std_logic;
 
@@ -196,6 +199,7 @@ begin
 	   MemWrite => MemWrite_not_flushed,
 	   MemtoReg => MemtoReg_not_flushed,
 	   LoadWord => LoadWord_not_flushed,
+       LoadByte => LoadByte_not_flushed,
 	   Reg1_Valid => Reg1_Valid,
 	   Reg2_Valid => Reg2_Valid,
 
@@ -231,6 +235,7 @@ begin
 	zeros <= (others => '0');
 
  	LoadWord <= LoadWord_not_flushed when (flush = '0') else '0';
+ 	LoadByte <= LoadByte_not_flushed when (flush = '0') else '0';
 	Branch	 <= Branch_not_flushed when (flush = '0') else '0';
   	Jump	 <= Jump_not_flushed when (flush = '0') else '0';
 	MemRead	 <= MemRead_not_flushed when (flush = '0') else '0';

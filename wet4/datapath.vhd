@@ -46,6 +46,7 @@ architecture bhv of Datapath is
 	  Reg1_Valid      : out std_logic;
 	  Reg2_Valid      : out std_logic;
 	  LoadWord	    	: out std_logic;
+      LoadByte          : out std_logic;
 	  Branch		    : out std_logic;
 	  Jump		    	: out std_logic;
 	  jump_addr       	: out std_logic_vector(31 downto 0);
@@ -78,6 +79,7 @@ architecture bhv of Datapath is
 	   ReadData2_in    	: in std_logic_vector(31 downto 0);
 	   reg2_num_in		: in std_logic_vector(4 downto 0);
 	   LoadWord	   	: in std_logic;
+       LoadByte     : in std_logic;
 
 	   new_pc			: in std_logic_vector(31 downto 0);
 	   instruction_ofs	: in std_logic_vector(15 downto 0);
@@ -109,6 +111,7 @@ architecture bhv of Datapath is
 	   ALU_result		: out std_logic_vector(31 downto 0);
 	   ReadData2_forw_out   : out std_logic_vector(31 downto 0);
 	   RegWrite_out		: out std_logic;
+       LoadByte_out     : out std_logic;
 
 	-- to fetch unit
 	   Branch			: out std_logic;
@@ -132,6 +135,8 @@ architecture bhv of Datapath is
 	   ALU_result_in	: in std_logic_vector(31 downto 0);
 	   ReadData2_in		: in std_logic_vector(31 downto 0);
 	   RegWrite_in		: in std_logic;
+       LoadByte_in      : in std_logic;
+       
 
 	-- out
 	   RegDst_out		: out std_logic_vector(4 downto 0);	
@@ -234,6 +239,7 @@ architecture bhv of Datapath is
   signal decode_exec_writereg : std_logic_vector(4 downto 0);
   signal decode_exec_branch_instr : std_logic;
   signal decode_exec_loadword : std_logic;
+  signal decode_exec_loadbyte : std_logic;
   signal decode_reg1_valid : std_logic;
   signal decode_reg2_valid : std_logic;
 
@@ -252,6 +258,7 @@ architecture bhv of Datapath is
   signal exec_mem_alu_result: std_logic_vector(31 downto 0);
   signal exec_mem_readdata2_forw : std_logic_vector(31 downto 0);
   signal exec_mem_regwrite : std_logic;
+  signal exec_mem_loadbyte : std_logic;
   signal exec_lw : std_logic;
 
   signal mem_wb_regdst : std_logic_vector(4 downto 0);
@@ -293,6 +300,7 @@ begin  -- bhv
 	  Reg1_Valid        => decode_reg1_valid,
    	  Reg2_Valid        => decode_reg2_valid, 
  	  LoadWord	   	    => decode_exec_loadword,
+      LoadByte          => decode_exec_loadbyte,
 
 	  Branch		    => decode_exec_branch_instr,
 	  Jump		    	=> decode_jump,
@@ -325,6 +333,7 @@ begin  -- bhv
 	   ReadData2_in    	=> decode_exec_readdata2,
 	   reg2_num_in		=> decode_exec_reg2_num,
 	   LoadWord         => decode_exec_loadword,
+       LoadByte         => decode_exec_loadbyte,
 
 	   new_pc			=> decode_exec_new_pc,
 	   instruction_ofs	=> decode_exec_instr_ofs,
@@ -356,6 +365,7 @@ begin  -- bhv
 	   ALU_result		=> exec_mem_alu_result,
 	   ReadData2_forw_out   => exec_mem_readdata2_forw,
 	   RegWrite_out		=> exec_mem_regwrite,
+       LoadByte_out     => exec_mem_loadbyte,
 
 	-- to fetch unit
 	   Branch			=> exec_branch,
@@ -377,6 +387,7 @@ begin  -- bhv
 	   ALU_result_in	=> exec_mem_alu_result,
 	   ReadData2_in		=> exec_mem_readdata2_forw,
 	   RegWrite_in		=> exec_mem_regwrite,
+       LoadByte_in      => exec_mem_loadbyte,
 
 	-- out
 	   RegDst_out		=> mem_wb_regdst,	

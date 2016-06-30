@@ -19,6 +19,7 @@ entity Control is
     MemWrite : out std_logic;
     MemtoReg : out std_logic;
 	LoadWord : out std_logic;
+    LoadByte : out std_logic;
 	Reg1_Valid : out std_logic;
 	Reg2_Valid : out std_logic;
 
@@ -30,7 +31,7 @@ end Control;
 
 
 architecture bhv of Control is
-signal opbits : std_logic_vector(4 downto 0);
+signal opbits : std_logic_vector(5 downto 0);
 begin  -- bhv
 
   process(OpCode)
@@ -38,22 +39,25 @@ begin  -- bhv
     case OpCode is
       -- when R-TYPE
       when "000000"   => 
-		opbits <= "10000";
+		opbits <= "010000";
 	  -- when beq
       when "000100"   => 
-		opbits <= "01000";
+		opbits <= "001000";
 	  -- when jmp
 	  when "000010"   =>
-		opbits <= "00100";
+		opbits <= "000100";
 	  -- when lw
       when "100011"   => 
-		opbits <= "00010";
-	  -- when sw
+		opbits <= "000010";
+      -- when lb
+      when "100000"   =>
+        opbits <= "100010";
+      -- when sw
       when "101011"   =>
-		opbits <= "00001";
+		opbits <= "000001";
 
       when others =>
-		opbits <= "00000";
+		opbits <= "000000";
 	
     end case;
   end process;
@@ -68,6 +72,7 @@ begin  -- bhv
   MemWrite   <= opbits(0);
   MemtoReg   <= opbits(1);
   LoadWord   <= opbits(1);
+  LoadByte   <= opbits(1) & opbits(5);
   Reg1_Valid <= opbits(4) or opbits(3) or opbits(1) or opbits(0);
   Reg2_Valid <= opbits(4) or opbits(3);
 end bhv;
