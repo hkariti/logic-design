@@ -72,7 +72,7 @@ begin  -- bhv
   MemWrite   <= opbits(0);
   MemtoReg   <= opbits(1);
   LoadWord   <= opbits(1);
-  LoadByte   <= opbits(1) & opbits(5);
+  LoadByte   <= opbits(1) and opbits(5);
   Reg1_Valid <= opbits(4) or opbits(3) or opbits(1) or opbits(0);
   Reg2_Valid <= opbits(4) or opbits(3);
 end bhv;
