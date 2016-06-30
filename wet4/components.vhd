@@ -196,14 +196,16 @@ begin
 end process;
 end bhv;
 
--- sign extender, 16 bits to 32 bits
+-- sign extender, N bits to 32 bits
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.STD_LOGIC_ARITH.all;
 use IEEE.std_logic_unsigned.all;
 entity Sign_extend is
+  generic (
+        WIDTH : integer := 16);
   port(
-		d_in  : in  std_logic_vector(15 downto 0);
+		d_in  : in  std_logic_vector(WIDTH-1 downto 0);
 		d_out : out std_logic_vector(31 downto 0));
 end Sign_extend;
 
@@ -211,10 +213,10 @@ architecture bhv of Sign_extend is
 begin
   process(d_in)
   begin
-	for i in 31 downto 16 loop
-	  d_out(i)         <= d_in(15);
+	for i in 31 downto WIDTH loop
+	  d_out(i)         <= d_in(WIDTH-1);
 	end loop;
-	d_out(15 downto 0) <= d_in(15 downto 0);
+	d_out(WIDTH-1 downto 0) <= d_in(WIDTH-1 downto 0);
   end process;
 end bhv;
 
