@@ -1,0 +1,13 @@
+vcom -work work -2002 -explicit {control.vhd}
+vcom -work work -2002 -explicit {alucontrol.vhd}
+vcom -work work -2002 -explicit {components.vhd}
+vcom -work work -2002 -explicit {datapath.vhd}
+vcom -work work -2002 -explicit {mips.vhd}
+vcom -work work -2002 -explicit {decode.vhd}
+vcom -work work -2002 -explicit {execute.vhd}
+vcom -work work -2002 -explicit {fetch.vhd}
+vcom -work work -2002 -explicit {forwarding.vhd}
+vcom -work work -2002 -explicit {hazard.vhd}
+vcom -work work -2002 -explicit {memory_stage.vhd}
+vcom -work work -2002 -explicit {write_back.vhd}
+vcom -work work -2002 -explicit {tb_mips.vhd}

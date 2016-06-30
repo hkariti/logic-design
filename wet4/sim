@@ -1,0 +1,6 @@
+vsim work.tb_mips
+view wave
+do {pipeline_mips.do}
+add wave *
+add log /* -r
+run 10000ns -all 
